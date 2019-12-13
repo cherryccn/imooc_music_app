@@ -1,10 +1,14 @@
 package com.hjy.lib_commin_ui.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.support.annotation.FloatRange;
+import android.text.style.BackgroundColorSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -14,40 +18,62 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * @author renzhiqiang
- * @date 2019/4/24
+ * 状态栏工具类
+ *
+ * @author hjy
+ * @date 2019/12/13
  */
 public class StatusBarUtil {
+
+    private static final String TAG = "StatusBarUtil";
+
+    public static void immersive(Activity activity, int color, @FloatRange(from = 0.0, to = 1.0) float alpha, boolean dark) {
+        statusBarBackground(activity, color, alpha);
+        StatusBarTextMode(activity, dark);
+    }
+
     /**
-     * 修改状态栏为全透明
+     * 设置状态栏颜色
+     * 若颜色是透明的，则根据透明度设置alpha，除此之外的颜色，建议alpha=1.0
      */
-    public static void transparencyBar(Activity activity) {
+    private static void statusBarBackground(Activity activity, int color, @FloatRange(from = 0.0, to = 1.0) float alpha) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+            window.setStatusBarColor(mixtureColor(color, alpha));
+
+            int systemUiVisibility = window.getDecorView().getSystemUiVisibility();
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            window.getDecorView().setSystemUiVisibility(systemUiVisibility);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = activity.getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+            Window window = activity.getWindow();
+            int systemUiVisibility = window.getDecorView().getSystemUiVisibility();
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            window.getDecorView().setSystemUiVisibility(systemUiVisibility);
         }
     }
 
     /**
-     * 状态栏亮色模式，设置状态栏黑色文字、图标，
+     * 状态栏亮色模式/暗色模式:即设置状态栏文字颜色（黑色/白色）、图标，
      * 适配4.4以上版本MIUIV、Flyme和6.0以上版本其他Android
+     * 1:MIUUI 2:Flyme 3:android6.0
      *
-     * @return 1:MIUUI 2:Flyme 3:android6.0
+     * @param activity
+     * @param dark     true为亮色  false为暗色
      */
-    public static void statusBarLightMode(Activity activity) {
+    private static void StatusBarTextMode(Activity activity, boolean dark) {
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (miuiSetStatusBarLightMode(activity, true)) {
+            if (miuiSetStatusBarLightMode(activity, dark)) {
                 result = 1;
-            } else if (flymeSetStatusBarLightMode(activity.getWindow(), true)) {
+            } else if (flymeSetStatusBarLightMode(activity.getWindow(), dark)) {
                 result = 2;
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.getWindow()
@@ -57,39 +83,9 @@ public class StatusBarUtil {
                 result = 3;
             }
         }
+        Log.d(TAG, "result: " + result + "  dark:" + dark);
     }
 
-    /**
-     * 已知系统类型时，设置状态栏黑色文字、图标。
-     * 适配4.4以上版本MIUIV、Flyme和6.0以上版本其他Android
-     *
-     * @param type 1:MIUUI 2:Flyme 3:android6.0
-     */
-    public static void statusBarLightMode(Activity activity, int type) {
-        if (type == 1) {
-            miuiSetStatusBarLightMode(activity, true);
-        } else if (type == 2) {
-            flymeSetStatusBarLightMode(activity.getWindow(), true);
-        } else if (type == 3) {
-            activity.getWindow()
-                    .getDecorView()
-                    .setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-    }
-
-    /**
-     * 状态栏暗色模式，清除MIUI、flyme或6.0以上版本状态栏黑色文字、图标
-     */
-    public static void StatusBarDarkMode(Activity activity, int type) {
-        if (type == 1) {
-            miuiSetStatusBarLightMode(activity, false);
-        } else if (type == 2) {
-            flymeSetStatusBarLightMode(activity.getWindow(), false);
-        } else if (type == 3) {
-            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-        }
-    }
 
     /**
      * 设置状态栏图标为深色和魅族特定的文字风格
@@ -99,7 +95,7 @@ public class StatusBarUtil {
      * @param dark   是否把状态栏文字及图标颜色设置为深色
      * @return boolean 成功执行返回true
      */
-    public static boolean flymeSetStatusBarLightMode(Window window, boolean dark) {
+    private static boolean flymeSetStatusBarLightMode(Window window, boolean dark) {
         boolean result = false;
         if (window != null) {
             try {
@@ -120,7 +116,7 @@ public class StatusBarUtil {
                 window.setAttributes(lp);
                 result = true;
             } catch (Exception e) {
-
+                result = false;
             }
         }
         return result;
@@ -132,7 +128,7 @@ public class StatusBarUtil {
      * @param dark 是否把状态栏文字及图标颜色设置为深色
      * @return boolean 成功执行返回true
      */
-    public static boolean miuiSetStatusBarLightMode(Activity activity, boolean dark) {
+    private static boolean miuiSetStatusBarLightMode(Activity activity, boolean dark) {
         boolean result = false;
         Window window = activity.getWindow();
         if (window != null) {
@@ -165,13 +161,41 @@ public class StatusBarUtil {
                     }
                 }
             } catch (Exception e) {
-
+                result = false;
             }
         }
         return result;
     }
 
-    //获取屏幕虚拟键高度
+    private static int mixtureColor(int color, @FloatRange(from = 0.0, to = 1.0) float alpha) {
+        int a = (color & 0xff000000) == 0 ? 0xff : color >>> 24;
+        return (color & 0x00ffffff) | (((int) (a * alpha)) << 24);
+    }
+
+    /**
+     * 获取状态栏高度
+     *
+     * @param context
+     * @return
+     */
+    public static int getStatusBarHeight(Context context) {
+        int height = 0;
+        try {
+            @SuppressLint("PrivateApi") Class c = Class.forName("com.android.internal.R$dimen");
+            Field f = c.getField("status_bar_height");
+            int id = (int) f.get(null);
+            height = context.getResources().getDimensionPixelSize(id);
+        } catch (Exception e) {
+        }
+        return height;
+    }
+
+    /**
+     * 获取屏幕虚拟键高度
+     *
+     * @param context
+     * @return
+     */
     public static int getVirtualBarHeight(Context context) {
         int vh = 0;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -189,16 +213,12 @@ public class StatusBarUtil {
         return vh;
     }
 
-    public static int getStatusBarHeight(Context context) {
-        int height = 0;
-        try {
-            Class c = Class.forName("com.android.internal.R$dimen");
-            Field f = c.getField("status_bar_height");
-            int id = (int) f.get(null);
-            height = context.getResources().getDimensionPixelSize(id);
-        } catch (Exception e) {
-        }
-        return height;
+    /**
+     * 获取手机的密度
+     */
+    public static float getDensity(Context context) {
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        return dm.density;
     }
 
     public static int dip2px(Context context, float dpValue) {
@@ -211,11 +231,4 @@ public class StatusBarUtil {
         return (int) (pxValue / scale + 0.5f);
     }
 
-    /**
-     * 获取手机的密度
-     */
-    public static float getDensity(Context context) {
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        return dm.density;
-    }
 }

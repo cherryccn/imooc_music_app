@@ -20,7 +20,7 @@ ext {
     depsLibs = [
             appcompat     : "com.android.support:appcompat-v7:${depsVersion.appcompat}",
             magicindicator: "com.github.hackware1993:MagicIndicator:${depsVersion.magicindicator}",
-            constraint    : 'androidx.constraintlayout:constraintlayout:1.1.3',
+            constraint    : "androidx.constraintlayout:constraintlayout:${depsVersion.constraint}",
     ]
 
 }

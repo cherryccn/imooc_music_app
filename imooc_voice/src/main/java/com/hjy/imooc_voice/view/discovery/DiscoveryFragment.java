@@ -19,8 +19,7 @@ public class DiscoveryFragment extends Fragment {
     private Context mContext;
 
     public static Fragment newInstance() {
-        DiscoveryFragment fragment = new DiscoveryFragment();
-        return fragment;
+        return new DiscoveryFragment();
     }
 
     @Override
@@ -33,8 +32,7 @@ public class DiscoveryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_discory_layout, null);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_discory_layout, null);
     }
 
     @Override

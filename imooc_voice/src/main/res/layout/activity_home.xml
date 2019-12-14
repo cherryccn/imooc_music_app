@@ -58,7 +58,10 @@
     <!--    存放侧滑菜单-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_marginEnd="25dp"
+        android:background="@color/color_white">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -79,8 +82,7 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:visibility="gone" />
+                        android:layout_marginTop="20dp" />
 
                     <LinearLayout
                         android:id="@+id/unloggin_layout"

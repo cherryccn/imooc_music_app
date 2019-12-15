@@ -1,10 +1,14 @@
 package com.hjy.lib_network.okhttp.request;
 
+import java.io.File;
 import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 
 /**
  * 对外提供get/post/文件上传请求
@@ -47,7 +51,6 @@ public class CommonRequest {
     }
 
     /**
-     *
      * @param url
      * @param params
      * @return
@@ -84,4 +87,30 @@ public class CommonRequest {
                 .build();
 
     }
+
+
+    /**
+     * 文件上传请求
+     */
+    public static final MediaType FILE_TYPE = MediaType.parse("application/octet-stream");
+
+    public static Request createMultiPostRequest(String url, RequestParams params) {
+        MultipartBody.Builder requestBody = new MultipartBody.Builder();
+        requestBody.setType(MultipartBody.FORM);//指定表单类型
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.fileParams.entrySet()) {
+                if (entry.getValue() instanceof File) {
+                    requestBody.addPart(
+                            Headers.of("content-Disposition", "form-data;name=\"" + entry.getKey() + "\""),
+                            RequestBody.create((File) entry.getValue(), FILE_TYPE));
+                } else if (entry.getValue() instanceof String) {
+                    requestBody.addPart(
+                            Headers.of("content-Disposition", "form-data;name=\"" + entry.getKey() + "\""),
+                            RequestBody.create((String) entry.getValue(), null));
+                }
+            }
+        }
+        return new Request.Builder().url(url).post(requestBody.build()).build();
+    }
+
 }

@@ -6,12 +6,16 @@ import android.graphics.Typeface;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.hjy.imooc_voice.R;
+import com.hjy.imooc_voice.api.RequestCenter;
 import com.hjy.imooc_voice.model.CHANNEL;
 import com.hjy.imooc_voice.view.home.adpater.HomePagerAdapter;
 import com.hjy.lib_commin_ui.base.BaseActivity;
+import com.hjy.lib_network.okhttp.exception.OkHttpException;
+import com.hjy.lib_network.okhttp.listener.DisposeDataListener;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -53,7 +57,19 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initData() {
+        RequestCenter.login(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                Log.d("aaaa", "onSuccess: "+responseObj.toString());
+            }
 
+            @Override
+            public void onFailure(Object reasonObj) {
+                OkHttpException exception = (OkHttpException) reasonObj;
+                Log.d("aaaa", "getEcode: "+exception.getEcode()+"   getEmsg: "+exception.getEmsg());
+            }
+
+        });
     }
 
     /**

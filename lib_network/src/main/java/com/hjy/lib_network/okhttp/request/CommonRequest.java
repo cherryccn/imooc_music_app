@@ -16,19 +16,47 @@ import okhttp3.RequestBody;
  */
 public class CommonRequest {
 
-    public static Request createPostRequest(String url, RequestParams params) {
-        return createPostRequest(url, params, null);
+    private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType MEDIA_TYPE_FILE = MediaType.parse("application/octet-stream");
+
+    /**
+     * Get请求
+     *
+     * @param url
+     * @param params
+     * @return
+     */
+    public static Request createGetRequest(String url, RequestParams params) {
+        return createGetRequest(url, params, null);
     }
 
     /**
-     * 可以带请求头的post请求对象
+     * Post请求--Json
+     * @param url
+     * @param params
+     * @return
+     */
+    public static Request createPostByJsonRequest(String url, RequestParams params) {
+        return createPostByJsonRequest(url, params, null);
+    }
+
+
+
+    public static Request createPostByFormRequest(String url, RequestParams params) {
+        return createPostByFormRequest(url, params, null);
+    }
+
+    /**
+     * Post请求对象，以Json的方式
+     * 可以带请求头的
      *
      * @param url
      * @param params
      * @param headers
      * @return
      */
-    public static Request createPostRequest(String url, RequestParams params, RequestParams headers) {
+    public static Request createPostByJsonRequest(String url, RequestParams params, RequestParams headers) {
+        //FormBody--表单数据提交
         FormBody.Builder mFormBodyBuilder = new FormBody.Builder();
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
@@ -36,6 +64,7 @@ public class CommonRequest {
                 mFormBodyBuilder.add(entry.getKey(), entry.getValue());
             }
         }
+        //请求头
         Headers.Builder mHeaderBuilder = new Headers.Builder();
         if (headers != null) {
             for (Map.Entry<String, String> entry : headers.urlParams.entrySet()) {
@@ -50,28 +79,45 @@ public class CommonRequest {
                 .build();
     }
 
-    /**
-     * @param url
-     * @param params
-     * @return
-     */
-    public static Request createGetRequest(String url, RequestParams params) {
-        return createGetRequest(url, params, null);
-    }
 
     /**
-     * 可以带请求头的Get请求
+     * Post请求对象，以Form表单的方式
+     * 可以带请求头的
      *
      * @param url
      * @param params
      * @param headers
      * @return
      */
+    public static Request createPostByFormRequest(String url, RequestParams params, RequestParams headers) {
+        //FormBody--表单数据提交
+        FormBody.Builder mFormBodyBuilder = new FormBody.Builder();
+        if (params != null) {
+            for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
+                //参数遍历
+                mFormBodyBuilder.add(entry.getKey(), entry.getValue());
+            }
+        }
+        //请求头
+        Headers.Builder mHeaderBuilder = new Headers.Builder();
+        if (headers != null) {
+            for (Map.Entry<String, String> entry : headers.urlParams.entrySet()) {
+                //请求头遍历
+                mHeaderBuilder.add(entry.getKey(), entry.getValue());
+            }
+        }
+        return new Request.Builder()
+                .url(url)
+                .headers(mHeaderBuilder.build())
+                .post(mFormBodyBuilder.build())
+                .build();
+    }
+
     public static Request createGetRequest(String url, RequestParams params, RequestParams headers) {
-        StringBuilder urBuilder = new StringBuilder(url).append("?");
+        StringBuilder urlBuilder = new StringBuilder(url).append("?");
         for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
             //参数遍历
-            urBuilder.append(entry.getKey()).append("=").append(entry.getValue());
+            urlBuilder.append(entry.getKey()).append("=").append(entry.getValue());
         }
         Headers.Builder mHeaderBuilder = new Headers.Builder();
         if (headers != null) {
@@ -92,8 +138,6 @@ public class CommonRequest {
     /**
      * 文件上传请求
      */
-    public static final MediaType FILE_TYPE = MediaType.parse("application/octet-stream");
-
     public static Request createMultiPostRequest(String url, RequestParams params) {
         MultipartBody.Builder requestBody = new MultipartBody.Builder();
         requestBody.setType(MultipartBody.FORM);//指定表单类型
@@ -102,7 +146,7 @@ public class CommonRequest {
                 if (entry.getValue() instanceof File) {
                     requestBody.addPart(
                             Headers.of("content-Disposition", "form-data;name=\"" + entry.getKey() + "\""),
-                            RequestBody.create((File) entry.getValue(), FILE_TYPE));
+                            RequestBody.create((File) entry.getValue(), MEDIA_TYPE_FILE));
                 } else if (entry.getValue() instanceof String) {
                     requestBody.addPart(
                             Headers.of("content-Disposition", "form-data;name=\"" + entry.getKey() + "\""),
@@ -110,7 +154,10 @@ public class CommonRequest {
                 }
             }
         }
-        return new Request.Builder().url(url).post(requestBody.build()).build();
+        return new Request.Builder()
+                .url(url)
+                .post(requestBody.build())
+                .build();
     }
 
 }

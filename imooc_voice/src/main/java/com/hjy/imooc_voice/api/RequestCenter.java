@@ -29,7 +29,7 @@ public class RequestCenter {
         /**
          * 登陆接口
          */
-        public static String LOGIN = ROOT_URL + "/module_voice/login_phone";
+        public static String LOGIN = ROOT_URL + "/module_voice/login_phone.html";
     }
 
     //根据参数发送所有post请求
@@ -40,7 +40,7 @@ public class RequestCenter {
 
     //根据参数发送所有post请求
     public static void postRequest(String url, RequestParams params, Class<?> clazz, DisposeDataListener listener) {
-        CommonOkHttpClient.post(CommonRequest.createPostRequest(url, params),
+        CommonOkHttpClient.post(CommonRequest.createPostByFormRequest(url, params),
                 new DisposeDataHandle(listener, clazz));
     }
 
@@ -51,6 +51,6 @@ public class RequestCenter {
         RequestParams params = new RequestParams();
         params.put("mb", "18734924592");
         params.put("pwd", "999999q");
-        RequestCenter.getRequest(HttpConstants.LOGIN, params, User.class, listener);
+        RequestCenter.getRequest("https://api.xsmcfx.com/cms/api/services/app/Textcast/GetStandpointViewListByPaged?EquipmentNumber=AF6A7C18F5FF0EEDBE9976F840E5900F363CCC9E&SkipCount=0&Account=&BusinessPlatform=1", params, User.class, listener);
     }
 }

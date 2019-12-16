@@ -26,4 +26,6 @@ dependencies {
     implementation this.rootProject.depsLibs.appcompat
 
     api this.rootProject.depsLibs.okhttp        //okhttp依赖
+
+    api this.rootProject.depsLibs.gson          //gson
 }

@@ -28,7 +28,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * 用来发送get/post请求的工具类，包括设置一些请求的共用参数
+ * 用来发送get/post请求的工具类，包括设置一些请求的共用参数，https支持
  * Created by hjy on 2019/12/15
  */
 public class CommonOkHttpClient {
@@ -36,27 +36,28 @@ public class CommonOkHttpClient {
     private static final int TIME_OUT = 30;
     private static OkHttpClient mOkHttpClient;
 
-    //完成对OkHttpClient的初始化
+    //完成对OkHttpClient的配置
     static {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
                 .proxy(Proxy.NO_PROXY)//不使用代理
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .followRedirects(true)//允许重定向
+                .followRedirects(true)//支持重定向
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {
-                        return true;//返回true则表示对域名都是信任的；
+                        return true;            //返回true则表示对域名都是信任的，https支持
                     }
                 })
-                //添加公共请求头
+//                .sslSocketFactory(HttpsUtils.initSSLSocketFactory(), HttpsUtils.initTrustManager())//信任所有https点
+                //  为所有请求添加请求头，看个人需求
                 .addInterceptor(new Interceptor() {
                     @NotNull
                     @Override
                     public Response intercept(@NotNull Chain chain) throws IOException {
                         Request request = chain.request().newBuilder()
-                                .addHeader("User-Agent", "Imooc-Mobile")
+                                .addHeader("User-Agent", "Imooc-Mobile")// 标明发送本次请求的客户端
                                 .build();
                         return chain.proceed(request);
                     }
@@ -65,10 +66,13 @@ public class CommonOkHttpClient {
         mOkHttpClient = okHttpClientBuilder.build();
     }
 
+    public static OkHttpClient getOkHttpClient() {
+        return mOkHttpClient;
+    }
+
     /**
-     * get请求
+     * 通过构造好的Request,Callback去发送请求
      *
-     * @return
      */
     public static Call get(Request request, DisposeDataHandle handle) {
         Call call = mOkHttpClient.newCall(request);
@@ -76,22 +80,12 @@ public class CommonOkHttpClient {
         return call;
     }
 
-    /**
-     * post请求
-     *
-     * @return
-     */
     public static Call post(Request request, DisposeDataHandle handle) {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new CommonCallbackJsonCallback(handle));
         return call;
     }
 
-    /**
-     * 文件下载请求
-     *
-     * @return
-     */
     public static Call downLoadFile(Request request, DisposeDataHandle handle) {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new CommonCallbackFileCallback(handle));

@@ -32,9 +32,13 @@ public class CommonCallbackJsonCallback extends BaseCommonCallback {
 
     @Override
     public void onFailure(@NotNull Call call, @NotNull final IOException e) {
+        /**
+         * 此时还在非UI线程，因此要转发
+         */
         mDeliveryHandler.post(new Runnable() {
             @Override
             public void run() {
+                //接口回调    到主线程
                 mListener.onFailure(new OkHttpException(NETWORK_ERROR, e));
             }
         });
@@ -43,7 +47,6 @@ public class CommonCallbackJsonCallback extends BaseCommonCallback {
     @Override
     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
         final String result = response.body().string();
-        Log.d("bbbbb", "result: "+result);
         mDeliveryHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -58,20 +61,24 @@ public class CommonCallbackJsonCallback extends BaseCommonCallback {
             return;
         }
         try {
-            //业务层不需要解析
             if (mClass == null) {
+                //不需要解析，回调到应用层
                 mListener.onSuccess(result);
             } else {
-                //解析为实体对象，可以用gson ，fastjson替换
+                //将json数据解析为java对象返回到应用层
+                //ResponseEntityToModule   自定义的json数据解析类，这里可以使用gson,fastjson等
                 Object obj = ResponseEntityToModule.parseJsonToModule(result, mClass);
                 if (obj != null) {
                     mListener.onSuccess(obj);
-                }else {
-                    mListener.onFailure(new OkHttpException(JSON_ERROR,EMPTY_MSG));
+                } else {
+                    //json不合法
+                    mListener.onFailure(new OkHttpException(JSON_ERROR, EMPTY_MSG));
                 }
             }
         } catch (Exception e) {
-            mListener.onFailure(new OkHttpException(JSON_ERROR,EMPTY_MSG));
+            //其他异常
+            mListener.onFailure(new OkHttpException(JSON_ERROR, EMPTY_MSG));
+            e.printStackTrace();
         }
     }
 }

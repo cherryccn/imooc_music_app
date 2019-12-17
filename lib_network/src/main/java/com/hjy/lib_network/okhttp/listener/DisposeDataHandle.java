@@ -7,7 +7,7 @@ package com.hjy.lib_network.okhttp.listener;
 public class DisposeDataHandle {
 
     public DisposeDataListener mListener = null;
-    public Class<?> mClass = null;//要解析成的对象
+    public Class<?> mClass = null;//json->object  object.class  后面要解析的json实体类
     public String mSource = null;//文件保存路径
 
     public DisposeDataHandle(DisposeDataListener mListener) {

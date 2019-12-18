@@ -24,8 +24,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation this.rootProject.depsLibs.appcompat
-    implementation this.rootProject.depsLibs.magicindicator
     implementation this.rootProject.depsLibs.constraint
+    implementation this.rootProject.depsLibs.magicindicator
+    implementation this.rootProject.depsLibs.rxjava
+    implementation this.rootProject.depsLibs.rxandroid
+
     //基础UI库
     implementation project(path: ':lib_commin_ui')
     //二维码扫描库

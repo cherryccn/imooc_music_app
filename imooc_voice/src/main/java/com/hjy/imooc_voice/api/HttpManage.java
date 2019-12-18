@@ -16,6 +16,6 @@ public class HttpManage {
         RequestParams params = new RequestParams();
         params.put("mb", "18734924592");
         params.put("pwd", "999999q");
-        RequestCenter.get(HttpConstant.LOGIN, params, User.class, listener);
+        RequestCenter.get(HttpConstants.LOGIN, params, User.class, listener);
     }
 }

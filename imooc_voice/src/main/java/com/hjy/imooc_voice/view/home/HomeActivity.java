@@ -56,6 +56,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         mToggleView = findViewById(R.id.toggle_view);
         mToggleView.setOnClickListener(this);
         mSearchView = findViewById(R.id.search_view);
+        mSearchView.setOnClickListener(this);
 
         mViewPager = findViewById(R.id.view_pager);
         mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), CHANNELS);
@@ -132,6 +133,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     mDrawerLayout.closeDrawer(Gravity.START);
                 }
+                break;
+            case R.id.toggle_view:
+                break;
+            case R.id.search_view:
                 break;
         }
     }

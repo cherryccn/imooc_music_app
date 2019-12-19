@@ -129,8 +129,8 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.unloggin_layout:
                 if (!UserManager.getInstance().hasLogin()) {
                     LoginActivity.start(this);
-                }else {
-                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                } else {
+                    mDrawerLayout.closeDrawer(Gravity.START);
                 }
                 break;
         }

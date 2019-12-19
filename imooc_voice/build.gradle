@@ -25,9 +25,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation this.rootProject.depsLibs.appcompat
     implementation this.rootProject.depsLibs.constraint
+    //magicindicator
     implementation this.rootProject.depsLibs.magicindicator
+    //rxjava
     implementation this.rootProject.depsLibs.rxjava
     implementation this.rootProject.depsLibs.rxandroid
+    //eventbus
+    implementation this.rootProject.depsLibs.eventbus
 
     //基础UI库
     implementation project(path: ':lib_commin_ui')
@@ -49,4 +53,5 @@ dependencies {
     implementation project(path: ':lib_image_loader')
     //保活库
     implementation project(path: ':lib_pullalive')
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

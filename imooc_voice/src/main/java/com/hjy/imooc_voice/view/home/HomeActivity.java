@@ -7,12 +7,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.hjy.imooc_voice.R;
 import com.hjy.imooc_voice.api.HttpManage;
 import com.hjy.imooc_voice.model.CHANNEL;
 import com.hjy.imooc_voice.view.home.adpater.HomePagerAdapter;
+import com.hjy.imooc_voice.view.login.LoginActivity;
+import com.hjy.imooc_voice.view.login.manager.UserManager;
 import com.hjy.lib_commin_ui.base.BaseActivity;
 import com.hjy.lib_network.okhttp.exception.OkHttpException;
 import com.hjy.lib_network.okhttp.listener.DisposeDataListener;
@@ -36,6 +40,9 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private ViewPager mViewPager;
     private HomePagerAdapter mHomePagerAdapter;
 
+    private View unLogginLayout;
+    private ImageView mPhotoView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +54,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private void initView() {
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mToggleView = findViewById(R.id.toggle_view);
+        mToggleView.setOnClickListener(this);
         mSearchView = findViewById(R.id.search_view);
+
         mViewPager = findViewById(R.id.view_pager);
         mHomePagerAdapter = new HomePagerAdapter(getSupportFragmentManager(), CHANNELS);
         mViewPager.setAdapter(mHomePagerAdapter);
-        mToggleView.setOnClickListener(this);
-
         initMagicIndicator();
+
+        //登录相关UI
+        unLogginLayout = findViewById(R.id.unloggin_layout);
+        unLogginLayout.setOnClickListener(this);
+        mPhotoView = findViewById(R.id.avatr_view);
     }
 
     private void initData() {
@@ -113,6 +125,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.unloggin_layout:
+                if (!UserManager.getInstance().hasLogin()) {
+                    LoginActivity.start(this);
+                }else {
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                }
+                break;
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.hjy.imooc_voice.api;
 
-import com.hjy.imooc_voice.model.user.User;
+import com.hjy.imooc_voice.view.login.user.User;
 import com.hjy.lib_network.okhttp.listener.DisposeDataListener;
 import com.hjy.lib_network.okhttp.request.RequestParams;
 

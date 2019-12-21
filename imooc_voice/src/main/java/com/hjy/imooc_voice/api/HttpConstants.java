@@ -5,7 +5,8 @@ package com.hjy.imooc_voice.api;
  */
 public class HttpConstants {
 
-    private static final String ROOT_URL = "http://imooc.com/api";
+//    private static final String ROOT_URL = "http://imooc.com/api";
+    private static final String ROOT_URL="http:39.97.122.129";
 
     /**
      * 登陆接口

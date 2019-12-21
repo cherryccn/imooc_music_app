@@ -1,4 +1,4 @@
-package com.hjy.imooc_voice.model.user;
+package com.hjy.imooc_voice.view.login.user;
 
 
 import com.hjy.imooc_voice.model.BaseModel;

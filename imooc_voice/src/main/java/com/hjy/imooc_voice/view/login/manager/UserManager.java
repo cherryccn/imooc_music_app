@@ -1,6 +1,6 @@
 package com.hjy.imooc_voice.view.login.manager;
 
-import com.hjy.imooc_voice.model.user.User;
+import com.hjy.imooc_voice.view.login.user.User;
 
 /**
  * 单例管理登录用户信息
@@ -48,7 +48,7 @@ public class UserManager {
      *
      * @return
      */
-    private User getUser() {
+    public User getUser() {
         return mUser;
     }
 

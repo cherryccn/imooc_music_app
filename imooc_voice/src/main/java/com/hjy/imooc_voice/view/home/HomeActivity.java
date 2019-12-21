@@ -3,23 +3,21 @@ package com.hjy.imooc_voice.view.home;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.hjy.imooc_voice.R;
-import com.hjy.imooc_voice.api.HttpManage;
 import com.hjy.imooc_voice.model.CHANNEL;
 import com.hjy.imooc_voice.view.home.adpater.HomePagerAdapter;
 import com.hjy.imooc_voice.view.login.LoginActivity;
 import com.hjy.imooc_voice.view.login.manager.UserManager;
+import com.hjy.imooc_voice.view.login.user.LoginEvent;
 import com.hjy.lib_commin_ui.base.BaseActivity;
-import com.hjy.lib_network.okhttp.exception.OkHttpException;
-import com.hjy.lib_network.okhttp.listener.DisposeDataListener;
+import com.hjy.lib_image_loader.app.ImageLoaderManager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -29,6 +27,10 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerInd
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
@@ -47,6 +49,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        EventBus.getDefault().register(this);
         initView();
         initData();
     }
@@ -70,19 +73,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initData() {
-        HttpManage.login(new DisposeDataListener() {
-            @Override
-            public void onSuccess(Object responseObj) {
-                Log.d("aaaa", "onSuccess: " + responseObj.toString());
-            }
-
-            @Override
-            public void onFailure(Object reasonObj) {
-                OkHttpException exception = (OkHttpException) reasonObj;
-                Log.d("aaaa", "getEcode: " + exception.getEcode() + "   getEmsg: " + exception.getEmsg());
-            }
-
-        });
     }
 
     /**
@@ -139,5 +129,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
             case R.id.search_view:
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLoginEvent(LoginEvent event) {
+        unLogginLayout.setVisibility(View.GONE);
+        mPhotoView.setVisibility(View.VISIBLE);
+        ImageLoaderManager.getInstance().displayImageForCircle(UserManager.getInstance().getUser().data.photoUrl, mPhotoView);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

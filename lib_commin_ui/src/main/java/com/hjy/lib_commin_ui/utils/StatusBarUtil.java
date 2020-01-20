@@ -3,10 +3,8 @@ package com.hjy.lib_commin_ui.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.FloatRange;
-import android.text.style.BackgroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -135,7 +133,7 @@ public class StatusBarUtil {
             Class clazz = window.getClass();
             try {
                 int darkModeFlag;
-                Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                @SuppressLint("PrivateApi") Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
                 Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
                 darkModeFlag = field.getInt(layoutParams);
                 //noinspection unchecked
@@ -199,7 +197,7 @@ public class StatusBarUtil {
     public static int getVirtualBarHeight(Context context) {
         int vh = 0;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
+        Display display = windowManager != null ? windowManager.getDefaultDisplay() : null;
         DisplayMetrics dm = new DisplayMetrics();
         try {
             @SuppressWarnings("rawtypes") Class c = Class.forName("android.view.Display");

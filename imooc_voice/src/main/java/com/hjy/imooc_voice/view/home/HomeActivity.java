@@ -16,7 +16,7 @@ import com.hjy.imooc_voice.view.home.adpater.HomePagerAdapter;
 import com.hjy.imooc_voice.view.login.LoginActivity;
 import com.hjy.imooc_voice.view.login.manager.UserManager;
 import com.hjy.imooc_voice.view.login.user.LoginEvent;
-import com.hjy.lib_commin_ui.base.BaseActivity;
+import com.hjy.lib_common_ui.base.BaseActivity;
 import com.hjy.lib_image_loader.app.ImageLoaderManager;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;

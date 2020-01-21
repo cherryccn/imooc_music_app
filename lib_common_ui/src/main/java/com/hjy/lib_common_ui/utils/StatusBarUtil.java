@@ -1,4 +1,4 @@
-package com.hjy.lib_commin_ui.utils;
+package com.hjy.lib_common_ui.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

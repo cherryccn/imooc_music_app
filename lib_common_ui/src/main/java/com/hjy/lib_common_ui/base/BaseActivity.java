@@ -1,11 +1,11 @@
-package com.hjy.lib_commin_ui.base;
+package com.hjy.lib_common_ui.base;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
-import com.hjy.lib_commin_ui.utils.StatusBarUtil;
+import com.hjy.lib_common_ui.utils.StatusBarUtil;
 
 public class BaseActivity extends FragmentActivity {
 

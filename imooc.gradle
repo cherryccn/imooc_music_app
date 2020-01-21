@@ -12,8 +12,10 @@ ext {
     //存放所有要依赖的第三方的版本号
     depsVersion = [
             appcompat     : '28.0.0',
-            magicindicator: '1.5.0',
+            design        : '28.0.0',
+            recyclerview  : '28.0.0',
             constraint    : '1.1.3',
+            magicindicator: '1.5.0',
             okhttp        : '4.2.2',
             gson          : '2.8.6',
             rxjava        : '2.2.9',
@@ -21,13 +23,16 @@ ext {
             glide         : '4.9.0',
             glidecompiler : '4.9.0',
             eventbus      : '3.1.1',
+            greendao      : '3.2.2',
     ]
 
     //存放要依赖的第三方库的地址
     depsLibs = [
             appcompat     : "com.android.support:appcompat-v7:${depsVersion.appcompat}",
+            design        : "com.android.support:design:${depsVersion.design}",
+            recyclerview  : "com.android.support:appcompat-v7:${depsVersion.recyclerview}",
+            constraint    : "com.android.support.constraint:constraint-layout:${depsVersion.constraint}",
             magicindicator: "com.github.hackware1993:MagicIndicator:${depsVersion.magicindicator}",
-            constraint    : "androidx.constraintlayout:constraintlayout:${depsVersion.constraint}",
             okhttp        : "com.squareup.okhttp3:okhttp:${depsVersion.okhttp}",
             gson          : "com.google.code.gson:gson:${depsVersion.gson}",
             glide         : "com.github.bumptech.glide:glide:${depsVersion.glide}",
@@ -35,6 +40,7 @@ ext {
             rxjava        : "io.reactivex.rxjava2:rxjava:${depsVersion.rxjava}",
             rxandroid     : "io.reactivex.rxjava2:rxandroid:${depsVersion.rxandroid}",
             eventbus      : "org.greenrobot:eventbus:${depsVersion.eventbus}",
+            greendao      : "org.greenrobot:greendao:${depsVersion.greendao}",
     ]
 
 }

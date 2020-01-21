@@ -1,4 +1,4 @@
-package com.hjy.lib_commin_ui.circle_image_view;
+package com.hjy.lib_common_ui.circle_image_view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,7 +29,7 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.support.v7.widget.AppCompatImageView;
 
-import com.hjy.lib_commin_ui.R;
+import com.hjy.lib_common_ui.R;
 
 @SuppressWarnings("UnusedDeclaration")
 public class CircleImageView extends AppCompatImageView {//ImageView

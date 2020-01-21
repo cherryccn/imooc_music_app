@@ -10,8 +10,8 @@ import com.hjy.imooc_voice.api.HttpManage;
 import com.hjy.imooc_voice.view.login.manager.UserManager;
 import com.hjy.imooc_voice.view.login.user.LoginEvent;
 import com.hjy.imooc_voice.view.login.user.User;
-import com.hjy.lib_commin_ui.base.BaseActivity;
-import com.hjy.lib_commin_ui.utils.StatusBarUtil;
+import com.hjy.lib_common_ui.base.BaseActivity;
+import com.hjy.lib_common_ui.utils.StatusBarUtil;
 import com.hjy.lib_network.okhttp.listener.DisposeDataListener;
 
 import org.greenrobot.eventbus.EventBus;

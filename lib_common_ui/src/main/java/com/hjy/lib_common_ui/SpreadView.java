@@ -1,4 +1,4 @@
-package com.hjy.lib_commin_ui;
+package com.hjy.lib_common_ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;

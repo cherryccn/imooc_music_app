@@ -34,7 +34,7 @@ dependencies {
     implementation this.rootProject.depsLibs.eventbus
 
     //基础UI库
-    implementation project(path: ':lib_commin_ui')
+    implementation project(path: ':lib_common_ui')
     //二维码扫描库
     implementation project(path: ':lib_qrcode')
     //视频播放器组件

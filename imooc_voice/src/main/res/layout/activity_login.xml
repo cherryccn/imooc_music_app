@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp">
 
-        <com.hjy.lib_commin_ui.SpreadView
+        <com.hjy.lib_common_ui.SpreadView
             android:id="@+id/spreadView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -18,7 +18,7 @@
             app:spread_max_radius="90"
             app:spread_radius="100" />
 
-        <com.hjy.lib_commin_ui.circle_image_view.CircleImageView
+        <com.hjy.lib_common_ui.circle_image_view.CircleImageView
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerInParent="true"

@@ -26,6 +26,7 @@ import com.hjy.lib_network.BuildConfig;
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +54,7 @@ public final class LogInterceptor implements Interceptor {
         return Holder.INSTANCE;
     }
 
-    private static final Charset UTF8 = Charset.forName("UTF-8");
+    private static final Charset UTF8 = StandardCharsets.UTF_8;
 
     private Gson mGson = new GsonBuilder()
             .setPrettyPrinting()
@@ -119,15 +120,15 @@ public final class LogInterceptor implements Interceptor {
             // Request body headers are only present when installed as a network interceptor. Force
             // them to be included (when available) so there values are known.
             if (requestBody.contentType() != null) {
-                builder.append("Content-Type: " + requestBody.contentType()).append("\n");
+                builder.append("Content-Type: ").append(requestBody.contentType()).append("\n");
             }
             if (requestBody.contentLength() != -1) {
-                builder.append("Content-Length: " + requestBody.contentLength()).append("\n");
+                builder.append("Content-Length: ").append(requestBody.contentLength()).append("\n");
             }
         }
 
+        Headers headers = request.headers();
         if (logHeaders) {
-            Headers headers = request.headers();
             for (int i = 0, count = headers.size(); i < count; i++) {
                 String name = headers.name(i);
                 // Skip headers from the request body as they are explicitly logged above.
@@ -137,9 +138,8 @@ public final class LogInterceptor implements Interceptor {
                 }
             }
         } else {
-            Headers headers = request.headers();
             if (headers.get("Authorization") != null) {
-                builder.append("Authorization: " + headers.get("Authorization")).append("\n");
+                builder.append("Authorization: ").append(headers.get("Authorization")).append("\n");
             }
         }
 
@@ -162,7 +162,10 @@ public final class LogInterceptor implements Interceptor {
                 assert charset != null;
                 builder.append(buffer.readString(charset)).append("\n");
             } else {
-                builder.append("[binary " + requestBody.contentLength() + "-byte body omitted]").append("\n");
+                builder.append("[binary ")
+                        .append(requestBody.contentLength())
+                        .append("-byte body omitted]")
+                        .append("\n");
             }
         }
 
@@ -171,10 +174,11 @@ public final class LogInterceptor implements Interceptor {
         try {
             response = chain.proceed(request);
         } catch (Exception e) {
-            builder.append("<-- HTTP FAILED: "
-                    + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs)
-                    + "ms "
-                    + e).append("\n");
+            builder.append("<-- HTTP FAILED: ")
+                    .append(TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs))
+                    .append("ms ")
+                    .append(e)
+                    .append("\n");
             logger.log(builder.toString());
 
 //            if (e instanceof IOException) {
@@ -187,21 +191,24 @@ public final class LogInterceptor implements Interceptor {
         ResponseBody responseBody = response.body();
         boolean hasBody = responseBody != null;
 
-        builder.append("<-- "
-                + response.code()
-                + (response.message().isEmpty() ? "" : " " + response.message())
-                + " "
-                + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs) + "ms")
+        builder.append("<-- ")
+                .append(response.code())
+                .append(response.message().isEmpty() ? "" : " " + response.message())
+                .append(" ")
+                .append(TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs))
+                .append("ms")
                 .append("\n");
 
-        Headers headers = response.headers();
+//        Headers headers = response.headers();
         if (logHeaders) {
             for (int i = 0, count = headers.size(); i < count; i++) {
                 logHeader(builder, headers, i);
             }
         } else {
             if (hasBody && responseBody.contentType() != null) {
-                builder.append("Content-Type: " + responseBody.contentType()).append("\n");
+                builder.append("Content-Type: ")
+                        .append(responseBody.contentType())
+                        .append("\n");
             }
         }
 
@@ -228,7 +235,10 @@ public final class LogInterceptor implements Interceptor {
             }
 
             if (!isPlaintext(buffer)) {
-                builder.append("[binary " + buffer.size() + "-byte body omitted]").append("\n");
+                builder.append("[binary ")
+                        .append(buffer.size())
+                        .append("-byte body omitted]")
+                        .append("\n");
                 logger.log(builder.toString());
                 return response;
             }
@@ -257,7 +267,7 @@ public final class LogInterceptor implements Interceptor {
 
     private void logHeader(StringBuilder builder, Headers headers, int i) {
         String value = headersToRedact.contains(headers.name(i)) ? "██" : headers.value(i);
-        builder.append(headers.name(i) + ": " + value).append("\n");
+        builder.append(headers.name(i)).append(": ").append(value).append("\n");
     }
 
     private boolean isPlaintext(Buffer buffer) {

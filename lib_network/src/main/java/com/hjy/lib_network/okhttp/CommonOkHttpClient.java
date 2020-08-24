@@ -2,7 +2,6 @@ package com.hjy.lib_network.okhttp;
 
 import com.hjy.lib_network.okhttp.Interceptor.LogInterceptor;
 import com.hjy.lib_network.okhttp.listener.DisposeDataHandle;
-import com.hjy.lib_network.okhttp.listener.DisposeDataListener;
 import com.hjy.lib_network.okhttp.response.CommonCallbackFileCallback;
 import com.hjy.lib_network.okhttp.response.CommonCallbackJsonCallback;
 
@@ -10,18 +9,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.Proxy;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
 import okhttp3.Call;
-import okhttp3.Cookie;
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -74,16 +67,14 @@ public class CommonOkHttpClient {
      * 通过构造好的Request,Callback去发送请求
      *
      */
-    public static Call get(Request request, DisposeDataHandle handle) {
+    public static void get(Request request, DisposeDataHandle handle) {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new CommonCallbackJsonCallback(handle));
-        return call;
     }
 
-    public static Call post(Request request, DisposeDataHandle handle) {
+    public static void post(Request request, DisposeDataHandle handle) {
         Call call = mOkHttpClient.newCall(request);
         call.enqueue(new CommonCallbackJsonCallback(handle));
-        return call;
     }
 
     public static Call downLoadFile(Request request, DisposeDataHandle handle) {

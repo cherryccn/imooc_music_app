@@ -64,8 +64,6 @@ public class CommonRequest {
         return createMultiPostRequest(url, params, null);
     }
 
-
-
     /**
      * Get--可带请求头
      *
@@ -191,5 +189,4 @@ public class CommonRequest {
                 .post(requestBody.build())
                 .build();
     }
-
 }

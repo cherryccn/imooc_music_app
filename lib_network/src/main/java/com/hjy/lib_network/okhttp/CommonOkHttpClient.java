@@ -27,7 +27,7 @@ import okhttp3.Response;
 public class CommonOkHttpClient {
 
     private static final int TIME_OUT = 30;
-    private static OkHttpClient mOkHttpClient;
+    private static final OkHttpClient mOkHttpClient;
 
     //完成对OkHttpClient的配置
     static {

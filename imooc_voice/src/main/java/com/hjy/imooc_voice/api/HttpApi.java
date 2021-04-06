@@ -3,7 +3,7 @@ package com.hjy.imooc_voice.api;
 /**
  *  Http常量类，存放一些url等
  */
-public class HttpConstants {
+public class HttpApi {
 
 //    private static final String ROOT_URL = "http://imooc.com/api";
     private static final String ROOT_URL="http:39.97.122.129";

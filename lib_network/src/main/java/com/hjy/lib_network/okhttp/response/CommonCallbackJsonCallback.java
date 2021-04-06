@@ -22,7 +22,7 @@ import okhttp3.Response;
  */
 public class CommonCallbackJsonCallback extends BaseCommonCallback {
 
-    private Class<?> mClass;
+    private final Class<?> mClass;
 
     public CommonCallbackJsonCallback(DisposeDataHandle handle) {
         mListener = handle.mListener;

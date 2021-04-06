@@ -142,7 +142,6 @@ public class ImageLoaderManager {
     public void displayImageForNotification(Context context, String url, int id,
                                             RemoteViews rv, Notification notification,
                                             int notificationId) {
-
         this.displayImageForTarget(context, url, initNotificationTarget(context, id, rv,
                 notification, notificationId));
     }

@@ -7,7 +7,7 @@ import com.hjy.lib_network.okhttp.request.RequestParams;
 /**
  * API请求
  */
-public class HttpManage {
+public class HttpParams {
 
     /**
      * 用户登陆请求
@@ -16,6 +16,6 @@ public class HttpManage {
         RequestParams params = new RequestParams();
         params.put("mb", "18734924592");
         params.put("pwd", "999999q");
-        RequestCenter.get(HttpConstants.LOGIN, params, User.class, listener);
+        RequestCenter.get(HttpApi.LOGIN, params, User.class, listener);
     }
 }

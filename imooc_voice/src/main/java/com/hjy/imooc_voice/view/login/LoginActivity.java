@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.hjy.imooc_voice.R;
-import com.hjy.imooc_voice.api.HttpManage;
+import com.hjy.imooc_voice.api.HttpParams;
 import com.hjy.imooc_voice.view.login.manager.UserManager;
 import com.hjy.imooc_voice.view.login.user.LoginEvent;
 import com.hjy.imooc_voice.view.login.user.User;
@@ -35,7 +35,7 @@ public class LoginActivity extends BaseActivity implements DisposeDataListener{
         findViewById(R.id.login_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HttpManage.login(LoginActivity.this);
+                HttpParams.login(LoginActivity.this);
             }
         });
     }
